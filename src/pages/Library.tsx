@@ -80,7 +80,7 @@ export default function Library() {
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base flex items-center justify-between">
                     <span className="truncate max-w-[70%]">{a.assetPublicId}</span>
-                    <Badge className="bg-blue-900/20 text-blue-300 border-blue-700/40">
+                    <Badge className="bg-blue-900/20 text-grey-200 border-blue-700/40">
                       {a.assetType}
                     </Badge>
                   </CardTitle>
@@ -93,7 +93,7 @@ export default function Library() {
 
                   <div className="mt-3 flex items-center justify-between">
                     <span className="text-xs">{new Date(a.createdAt as unknown as string).toLocaleString()}</span>
-                    <Badge className="bg-green-900/20 text-green-300 border-green-700/40">
+                    <Badge className="bg-green-900/20 text-grey-200 border-green-700/40">
                       {a.assetStatus}
                     </Badge>
                   </div>
