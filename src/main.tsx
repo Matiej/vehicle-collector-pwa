@@ -1,4 +1,4 @@
-import './index.css' 
+import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -46,6 +46,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Sessions /> },
+      { path: "sessions", element: <Sessions /> },
       { path: "sessions/:id", element: <SessionDetails /> },
       { path: "library", element: <Library /> },
     ],
@@ -57,7 +58,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-       <Toaster richColors />
+      <Toaster richColors />
     </QueryClientProvider>
   </React.StrictMode>
 );

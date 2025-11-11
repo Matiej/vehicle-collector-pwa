@@ -66,9 +66,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import Uploader from "@/ui/Uploader";
 
 export default function SessionDetails() {
+  const statusColors: Record<string, string> = {
+    CREATED: "bg-green-700/30 text-grey-200 border-green-700/40",
+    OPEN: "bg-blue-700/30 text-grey-200 border-blue-700/40",
+    CLOSED: "bg-orange-700/30 text-grey-200 border-orange-700/40",
+    ERROR: "bg-red-700/30 text-grey-200 border-red-700/40",
+  };
   const { id = "" } = useParams();
   const qc = useQueryClient();
 
@@ -93,11 +100,18 @@ export default function SessionDetails() {
   return (
     <div className="grid gap-6">
       {/* Nagłówek sesji */}
+      <div className="flex items-center justify-between">
+        <Button variant="outline" asChild>
+          <Link to="/sessions">← Back to sessions</Link>
+        </Button>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span className="truncate">Session {data.sessionId}</span>
-            <Badge variant={data.status === "CLOSED" ? "destructive" : "secondary"}>{data.status}</Badge>
+            <Badge className={statusColors[data.status] || ""}>
+              {data.status}
+            </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">
