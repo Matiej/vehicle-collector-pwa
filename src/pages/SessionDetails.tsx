@@ -51,10 +51,9 @@ export default function SessionDetails() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span className="truncate">
-              Session{" "}
               {data.sessionName
                 ? `Session: ${data.sessionName}`
-                : `Session ${data.sessionPublicId}`}
+                : `Session: ${data.sessionPublicId}`}
             </span>
             <Badge className={statusColors[data.sessionStatus] || ""}>
               {data.sessionStatus}
@@ -77,7 +76,10 @@ export default function SessionDetails() {
           <CardTitle>Upload assets</CardTitle>
         </CardHeader>
         <CardContent>
-          <Uploader sessionPublicId={data.sessionPublicId} ownerId={ownerId()} />
+          <Uploader
+            sessionPublicId={data.sessionPublicId}
+            ownerId={ownerId()}
+          />
           <Separator className="my-4" />
           <Button
             disabled={close.isPending || data.sessionStatus === "CLOSED"}

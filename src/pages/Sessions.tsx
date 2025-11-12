@@ -7,15 +7,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 
 export default function Sessions() {
-    const statusColors: Record<string, string> = {
+  const navigate = useNavigate();
+  const statusColors: Record<string, string> = {
     CREATED: "bg-green-400/20",
     OPEN: "bg-blue-400/30  ",
-    CLOSED: "bg-orange-400/30",  
+    CLOSED: "bg-orange-400/30",
     ERROR: "bg-red-400/30  ",
   };
   const qc = useQueryClient();
+  const [sessionName, setSessionName] = useState("");
   const { data, isLoading, error } = useQuery({
     queryKey: ["sessions", ownerId()],
     queryFn: () => listSessions(ownerId()),
@@ -23,10 +28,18 @@ export default function Sessions() {
 
   const create = useMutation({
     mutationFn: () =>
-      createSession({ ownerId: ownerId(), mode: "BULK", device: "iphone" }),
-    onSuccess: () => {
+      createSession({
+        ownerId: ownerId(),
+        mode: "BULK",
+        device: navigator.userAgent + "_" + navigator.platform || "unknown",
+        sessionName: sessionName.trim() || undefined,
+      }),
+    onSuccess: (created) => {
       qc.invalidateQueries({ queryKey: ["sessions", ownerId()] });
       toast.success("Session created");
+      if (created?.sessionPublicId) {
+        navigate(`/sessions/${created.sessionPublicId}`);
+      }
     },
     onError: () => toast.error("Failed to create session"),
   });
@@ -38,9 +51,27 @@ export default function Sessions() {
     <div className="grid gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Sessions</h1>
-        <Button disabled={create.isPending} onClick={() => create.mutate()}>
+        {/* <Button disabled={create.isPending} onClick={() => create.mutate()}>
           + Create BULK session
-        </Button>
+        </Button> */}
+        <div className="flex gap-2 items-center">
+          <Input
+            placeholder="Session name (optional)"
+            maxLength={100}
+            value={sessionName}
+            onChange={(e) => setSessionName(e.target.value)}
+            className="w-48"
+          />
+          {sessionName.length > 100 && (
+            <p className="text-xs text-red-400">Maximum 100 characters</p>
+          )}
+          <Button
+            disabled={create.isPending || sessionName.length > 100}
+            onClick={() => create.mutate()}
+          >
+            + Create BULK session
+          </Button>
+        </div>
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -60,9 +91,10 @@ export default function Sessions() {
             <CardContent className="text-sm text-zinc-400">
               <div>
                 {" "}
-                Status: <span className={statusColors[s.sessionStatus] || ""}>
+                Status:{" "}
+                <span className={statusColors[s.sessionStatus] || ""}>
                   {s.sessionStatus}
-                  </span>
+                </span>
               </div>
               <div>{new Date(s.createdAt).toLocaleString()}</div>
               <div>Assets: {s.assetsCount}</div>
