@@ -92,7 +92,7 @@ export default function Library() {
                   </div>
 
                   <div className="mt-3 flex items-center justify-between">
-                    <span className="text-xs">{new Date(a.createdAt as unknown as string).toLocaleString()}</span>
+                    <span className="text-xs">{new Date(a.createdAt).toLocaleString()}</span>
                     <Badge className="bg-green-900/20 text-grey-200 border-green-700/40">
                       {a.assetStatus}
                     </Badge>

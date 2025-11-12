@@ -13,14 +13,14 @@ export async function createSession(req: CreateSessionRequest) {
     return data;
 }
 
-export async function getSession(sessionId: string) {
-    const { data } = await api.get<SessionResponse>(`/sessions/${sessionId}`);
+export async function getSession(sessionPublicId: string) {
+    const { data } = await api.get<SessionResponse>(`/sessions/${sessionPublicId}`);
     return data;
 }
 
 
-export async function closeSession(sessionId: string, status: 'CLOSED' | 'OPEN' | 'ERROR') {
-    const { data } = await api.put<SessionResponse>(`/sessions/${sessionId}`, null, {
+export async function closeSession(sessionPublicId: string, status: 'CLOSED' | 'OPEN' | 'ERROR') {
+    const { data } = await api.put<SessionResponse>(`/sessions/${sessionPublicId}`, null, {
         params: { sessionStatus: status }
     });
     return data;

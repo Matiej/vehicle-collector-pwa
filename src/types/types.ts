@@ -6,7 +6,7 @@ export type SessionMode = 'SPOT' | 'BULK';
 
 
 export interface SessionAssetDto {
-    id: string;
+    assetPublicId: string;
     type: string; // image | audio (na teraz image)
     status: string; // RAW, VECTORIZED, TRANSCRIBED, ERROR
     thumbnailUrl?: string | null;
@@ -14,18 +14,20 @@ export interface SessionAssetDto {
 
 
 export interface SessionResponse {
-    sessionId: string;
+    sessionPublicId: string;
+    sessionName?: string | null;
     mode: SessionMode;
     ownerId: string;
     spotId?: string | null;
-    status: SessionStatus;
+    sessionStatus: SessionStatus;
     createdAt: string; // ISO
     assets: SessionAssetDto[];
 }
 
 
 export interface SessionSummaryResponse {
-    sessionId: string;
+    sessionPublicId: string;
+    sessionName?: string | null;
     sessionMode: SessionMode;
     ownerId: string;
     assetsCount: number;
@@ -41,16 +43,15 @@ export type AssetType = 'IMAGE' | 'AUDIO';
 
 export interface AssetLocation {
     locationSource: 'EXIF' | 'UPLOAD' | 'DEVICE' | 'UNKNOWN';
-    lat: string;
-    lng: string;
+    lat: number | string;
+    lng: number | string;
 }
 
 
 export interface AssetResponse {
-    id?: string | null;
     assetPublicId: string;
     ownerId: string;
-    sessionId?: string | null;
+    sessionPublicId?: string | null;
     spotId?: string | null;
     assetType: AssetType;
     assetStatus: AssetStatus;
@@ -73,4 +74,6 @@ export interface CreateSessionRequest {
     ownerId: string;
     mode: SessionMode; // w MVP zawsze 'BULK'
     device?: string;
+    sessionName?: string;
+    clientVersion?: string;
 }

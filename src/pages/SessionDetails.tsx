@@ -1,62 +1,3 @@
-// import { useParams } from "react-router-dom";
-// import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-// import { closeSession, getSession } from "../api/sessions";
-// import { ownerId } from "../lib/api";
-// import Uploader from "../ui/Uploader";
-
-// export default function SessionDetails() {
-//   const { id = "" } = useParams();
-//   const qc = useQueryClient();
-//   const { data, isLoading } = useQuery({
-//     queryKey: ["session", id],
-//     queryFn: () => getSession(id),
-//   });
-
-//   const close = useMutation({
-//     mutationFn: () => closeSession(id, "CLOSED"),
-//     onSuccess: () => qc.invalidateQueries({ queryKey: ["session", id] }),
-//   });
-
-//   if (isLoading || !data) return <p>Loading…</p>;
-
-//   return (
-//     <div>
-//       <h1>Session {data.sessionId}</h1>
-//       <p>
-//         Status: <b>{data.status}</b>
-//       </p>
-//       <Uploader sessionId={data.sessionId} ownerId={ownerId()} />
-
-//       <button
-//         disabled={close.isPending}
-//         onClick={() => close.mutate()}
-//         style={{ marginTop: 12 }}
-//       >
-//         Close session
-//       </button>
-
-//       <h3>Assets</h3>
-//       <ul>
-//         {data.assets?.map((a) => (
-//           <li key={a.id}>
-//             {a.id} • {a.type} • {a.status}
-//             {a.thumbnailUrl ? (
-//               <img
-//                 src={a.thumbnailUrl}
-//                 style={{
-//                   width: 80,
-//                   height: 80,
-//                   objectFit: "cover",
-//                   marginLeft: 8,
-//                 }}
-//               />
-//             ) : null}
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { closeSession, getSession } from "@/api/sessions";
@@ -70,6 +11,7 @@ import { Link } from "react-router-dom";
 import Uploader from "@/ui/Uploader";
 
 export default function SessionDetails() {
+  //refactor colors, put to the same file and use in other places
   const statusColors: Record<string, string> = {
     CREATED: "bg-green-700/30 text-grey-200 border-green-700/40",
     OPEN: "bg-blue-700/30 text-grey-200 border-blue-700/40",
@@ -108,9 +50,13 @@ export default function SessionDetails() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span className="truncate">Session {data.sessionId}</span>
-            <Badge className={statusColors[data.status] || ""}>
-              {data.status}
+            <span className="truncate">
+              {data.sessionName
+                ? `Session: ${data.sessionName}`
+                : `Session: ${data.sessionPublicId}`}
+            </span>
+            <Badge className={statusColors[data.sessionStatus] || ""}>
+              {data.sessionStatus}
             </Badge>
           </CardTitle>
         </CardHeader>
@@ -130,10 +76,13 @@ export default function SessionDetails() {
           <CardTitle>Upload assets</CardTitle>
         </CardHeader>
         <CardContent>
-          <Uploader sessionId={data.sessionId} ownerId={ownerId()} />
+          <Uploader
+            sessionPublicId={data.sessionPublicId}
+            ownerId={ownerId()}
+          />
           <Separator className="my-4" />
           <Button
-            disabled={close.isPending || data.status === "CLOSED"}
+            disabled={close.isPending || data.sessionStatus === "CLOSED"}
             onClick={() => close.mutate()}
           >
             Close session
@@ -150,7 +99,7 @@ export default function SessionDetails() {
           {data.assets?.length ? (
             <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {data.assets.map((a) => (
-                <li key={a.id} className="rounded-xl border p-3">
+                <li key={a.assetPublicId} className="rounded-xl border p-3">
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <span>{a.type}</span>
                     <Badge variant="secondary">{a.status}</Badge>

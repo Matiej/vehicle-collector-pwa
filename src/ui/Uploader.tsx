@@ -12,10 +12,10 @@ type Row = {
 };
 
 export default function Uploader({
-  sessionId,
+  sessionPublicId,
   ownerId,
 }: {
-  sessionId: string;
+  sessionPublicId: string;
   ownerId: string;
 }) {
   const [rows, setRows] = useState<Row[]>([]);
@@ -51,7 +51,7 @@ export default function Uploader({
       const qs = new URLSearchParams({ ownerId, type: "IMAGE" }).toString();
       const url = `${
         import.meta.env.VITE_API_BASE_URL
-      }/sessions/${sessionId}/assets?${qs}`;
+      }/sessions/${sessionPublicId}/assets?${qs}`;
 
       try {
         await xhrUpload({
