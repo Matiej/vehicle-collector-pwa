@@ -6,18 +6,18 @@ export async function listAssetsByOwner(ownerId: string, query?: { page?: number
     return data;
 }
 
-export async function listAssetsBySession(sessionId: string, query?: { page?: number; size?: number; sortDir?: 'ASC' | 'DESC' }) {
-    const { data } = await api.get<AssetsResponse>(`/assets/session/${sessionId}`, { params: query });
+export async function listAssetsBySession(sessionPublicId: string, query?: { page?: number; size?: number; sortDir?: 'ASC' | 'DESC' }) {
+    const { data } = await api.get<AssetsResponse>(`/assets/session/${sessionPublicId}`, { params: query });
     return data;
 }
 
 export async function uploadAsset({
-  sessionId,
+  sessionPublicId,
   ownerId,
   file,
   type,
 }: {
-  sessionId: string;
+  sessionPublicId: string;
   ownerId: string;
   file: File;
   type: 'IMAGE' | 'AUDIO';
@@ -26,7 +26,7 @@ export async function uploadAsset({
   form.append('file', file); // only file here
 
   const { data } = await api.post(
-    `/sessions/${sessionId}/assets`,
+    `/sessions/${sessionPublicId}/assets`,
     form,                                 // <-- body = FormData
     { params: { ownerId, type } }         // <-- query params (bo @RequestParam w BE)
   );

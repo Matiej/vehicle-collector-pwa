@@ -9,6 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 export default function Sessions() {
+    const statusColors: Record<string, string> = {
+    CREATED: "bg-green-400/20",
+    OPEN: "bg-blue-400/30  ",
+    CLOSED: "bg-orange-400/30",  
+    ERROR: "bg-red-400/30  ",
+  };
   const qc = useQueryClient();
   const { data, isLoading, error } = useQuery({
     queryKey: ["sessions", ownerId()],
@@ -16,7 +22,8 @@ export default function Sessions() {
   });
 
   const create = useMutation({
-    mutationFn: () => createSession({ ownerId: ownerId(), mode: "BULK", device: "iphone" }),
+    mutationFn: () =>
+      createSession({ ownerId: ownerId(), mode: "BULK", device: "iphone" }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["sessions", ownerId()] });
       toast.success("Session created");
@@ -30,7 +37,7 @@ export default function Sessions() {
   return (
     <div className="grid gap-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Sessionss</h1>
+        <h1 className="text-xl font-semibold">Sessions</h1>
         <Button disabled={create.isPending} onClick={() => create.mutate()}>
           + Create BULK session
         </Button>
@@ -38,17 +45,25 @@ export default function Sessions() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data?.map((s) => (
-          <Card key={s.sessionId} className="border-border/60">
+          <Card key={s.sessionPublicId} className="border-border/60">
             <CardHeader>
               <CardTitle className="text-base flex items-center justify-between">
-                <Link to={`/sessions/${s.sessionId}`} className="hover:underline">
-                  {s.sessionId}
+                <Link
+                  to={`/sessions/${s.sessionPublicId}`}
+                  className="hover:underline"
+                >
+                  {s.sessionName || s.sessionPublicId}
                 </Link>
                 <Badge>{s.sessionMode}</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-zinc-400">
-              <div> Status: <span className="text-zinc-200">{s.sessionStatus}</span></div>
+              <div>
+                {" "}
+                Status: <span className={statusColors[s.sessionStatus] || ""}>
+                  {s.sessionStatus}
+                  </span>
+              </div>
               <div>{new Date(s.createdAt).toLocaleString()}</div>
               <div>Assets: {s.assetsCount}</div>
             </CardContent>
