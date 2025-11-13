@@ -74,6 +74,6 @@ export interface CreateSessionRequest {
     ownerId: string;
     mode: SessionMode; // w MVP zawsze 'BULK'
     device?: string;
-    sessionName?: string;
+    sessionName?: string | undefined;
     clientVersion?: string;
 }
