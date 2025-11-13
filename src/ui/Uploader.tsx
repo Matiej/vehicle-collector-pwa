@@ -92,7 +92,7 @@ export default function Uploader({
       >
         <input {...getInputProps()} />
         <div className="text-center">
-          <b>Drop images or click here to select</b>
+          <b className="text-red-900">Drop images or click here to select</b>
         </div>
       </div>
 

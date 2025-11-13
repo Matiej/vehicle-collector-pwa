@@ -13,9 +13,7 @@ export function xhrUpload({
     const xhr = new XMLHttpRequest();
 
     xhr.open('POST', url, true);
-    // xhr.withCredentials = true; // jeśli masz ciasteczka; w przeciwnym razie usuń
 
-    // Nigdy NIE ustawiaj Content-Type przy FormData (boundary dodaje przeglądarka)
     if (headers) {
       Object.entries(headers).forEach(([k, v]) => {
         const low = k.toLowerCase();

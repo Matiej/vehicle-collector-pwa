@@ -26,13 +26,30 @@ export default function Sessions() {
     queryFn: () => listSessions(ownerId()),
   });
 
+  function formatTimestamp() {
+    const now = new Date();
+
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
+
+    const hh = String(now.getHours()).padStart(2, "0");
+    const min = String(now.getMinutes()).padStart(2, "0");
+    const ss = String(now.getSeconds()).padStart(2, "0");
+
+    return `${yyyy}-${mm}-${dd}_${hh}:${min}:${ss}`;
+  }
+
+  const saveSessionName: string =
+    sessionName.trim() || `${formatTimestamp()}_My session`;
+
   const create = useMutation({
     mutationFn: () =>
       createSession({
         ownerId: ownerId(),
         mode: "BULK",
         device: navigator.userAgent + "_" + navigator.platform || "unknown",
-        sessionName: sessionName.trim() || undefined,
+        sessionName: saveSessionName,
       }),
     onSuccess: (created) => {
       qc.invalidateQueries({ queryKey: ["sessions", ownerId()] });
