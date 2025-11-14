@@ -18,7 +18,7 @@
 
     "baseUrl": ".",                      // ← wymagane dla "paths" w TS<7
     "paths": { "@/*": ["src/*"] },
-    "ignoreDeprecations": "6.0"          // ← wycisza warning TS6
+    "ignoreDeprecations": "5.0"          // ← wycisza warning TS6
   },
   "include": ["src"]
 }
