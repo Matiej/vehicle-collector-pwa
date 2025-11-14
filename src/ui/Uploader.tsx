@@ -4,6 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { xhrUpload } from "@/lib/xhrUpload";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Row = {
   file: File;
@@ -19,7 +20,7 @@ export default function Uploader({
   ownerId: string;
 }) {
   const [rows, setRows] = useState<Row[]>([]);
-
+  const qc = useQueryClient();
   const onDrop = useCallback((accepted: File[]) => {
     const add = accepted.map((f) => ({
       file: f,
@@ -68,6 +69,8 @@ export default function Uploader({
             idx === i ? { ...r, status: "done", progress: 100 } : r
           )
         );
+        qc.invalidateQueries({ queryKey: ["sessions", ownerId] });
+        qc.invalidateQueries({ queryKey: ["session", sessionPublicId] });
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         setRows((prev) =>

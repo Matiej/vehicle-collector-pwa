@@ -68,9 +68,6 @@ export default function Sessions() {
     <div className="grid gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Sessions</h1>
-        {/* <Button disabled={create.isPending} onClick={() => create.mutate()}>
-          + Create BULK session
-        </Button> */}
         <div className="flex gap-2 items-center">
           <Input
             placeholder="Session name (optional)"
