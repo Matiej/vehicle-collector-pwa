@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { useAuth } from "@/auth/AuthProvider";
 
 const linkBase = "text-l font-medium transition-colors";
 const linkInactive = "text-zinc-500 hover:text-zinc-300";
@@ -6,6 +7,8 @@ const linkActive =
   "text-white after:block after:h-[2px] after:bg-white after:rounded-full after:mt-1";
 
 export default function App() {
+  const { logout } = useAuth();
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-black/40 bg-black/30 border-b border-border">
@@ -25,7 +28,7 @@ export default function App() {
                 `${linkBase} ${isActive ? linkActive : linkInactive}`
               }
             >
-              Sessions
+              SessionS
             </NavLink>
             <NavLink
               to="/library"
@@ -33,8 +36,14 @@ export default function App() {
                 `${linkBase} ${isActive ? linkActive : linkInactive}`
               }
             >
-              Library
+              LibrarY
             </NavLink>
+            <button
+              onClick={logout}
+              className={`${linkBase} ${linkInactive}`}
+            >
+              Wyloguj
+            </button>
           </nav>
         </div>
       </header>
