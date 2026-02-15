@@ -28,7 +28,7 @@ export default function App() {
                 `${linkBase} ${isActive ? linkActive : linkInactive}`
               }
             >
-              Sessions
+              SessionS
             </NavLink>
             <NavLink
               to="/library"
@@ -36,7 +36,7 @@ export default function App() {
                 `${linkBase} ${isActive ? linkActive : linkInactive}`
               }
             >
-              Library
+              LibrarY
             </NavLink>
             <button
               onClick={logout}

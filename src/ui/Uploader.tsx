@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { xhrUpload } from "@/lib/xhrUpload";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/auth/AuthProvider";
 
 type Row = {
   file: File;
@@ -20,6 +21,7 @@ export default function Uploader({
   ownerId: string;
 }) {
   const [rows, setRows] = useState<Row[]>([]);
+  const { token } = useAuth();
   const qc = useQueryClient();
   const onDrop = useCallback((accepted: File[]) => {
     const add = accepted.map((f) => ({
@@ -58,6 +60,7 @@ export default function Uploader({
         await xhrUpload({
           url,
           formData: form,
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
           onProgress: (p) =>
             setRows((prev) =>
               prev.map((r, idx) => (idx === i ? { ...r, progress: p } : r))
