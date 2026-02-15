@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { listAssetsByOwner } from "@/api/assets";
-import { ownerId } from "@/lib/api";
+import { useOwnerId } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button";
 type SortDir = "ASC" | "DESC";
 
 export default function Library() {
+  const ownerId = useOwnerId();
   const qc = useQueryClient();
   const online = typeof navigator !== "undefined" ? navigator.onLine : true;
 
   const { data, isPending, isError, isFetching } = useQuery({
-    queryKey: ["assets", ownerId(), { page: 0, size: 50, sortDir: "DESC" as SortDir }],
-    queryFn: () => listAssetsByOwner(ownerId(), { page: 0, size: 50, sortDir: "DESC" }),
+    queryKey: ["assets", ownerId, { page: 0, size: 50, sortDir: "DESC" as SortDir }],
+    queryFn: () => listAssetsByOwner(ownerId, { page: 0, size: 50, sortDir: "DESC" }),
+    enabled: !!ownerId,
     retry: false,
     networkMode: "offlineFirst",
   });
@@ -31,7 +33,7 @@ export default function Library() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => qc.invalidateQueries({ queryKey: ["assets", ownerId()] })}
+            onClick={() => qc.invalidateQueries({ queryKey: ["assets", ownerId] })}
           >
             Refresh
           </Button>

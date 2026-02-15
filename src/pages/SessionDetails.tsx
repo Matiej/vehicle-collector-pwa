@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { closeSession, getSession } from "@/api/sessions";
-import { ownerId } from "@/lib/api";
+import { useOwnerId } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import Uploader from "@/ui/Uploader";
 
 export default function SessionDetails() {
+  const ownerId = useOwnerId();
   //refactor colors, put to the same file and use in other places
   const statusColors: Record<string, string> = {
     CREATED: "bg-green-700/30 text-grey-200 border-green-700/40",
@@ -78,7 +79,7 @@ export default function SessionDetails() {
         <CardContent>
           <Uploader
             sessionPublicId={data.sessionPublicId}
-            ownerId={ownerId()}
+            ownerId={ownerId}
           />
           <Separator className="my-4" />
           <Button

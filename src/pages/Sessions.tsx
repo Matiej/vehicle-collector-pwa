@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createSession, listSessions } from "@/api/sessions";
-import { ownerId } from "@/lib/api";
+import { useOwnerId } from "@/lib/api";
 import { Link } from "react-router-dom";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Sessions() {
   const navigate = useNavigate();
+  const ownerId = useOwnerId();
   const statusColors: Record<string, string> = {
     CREATED: "bg-green-400/20",
     OPEN: "bg-blue-400/30  ",
@@ -22,8 +23,8 @@ export default function Sessions() {
   const qc = useQueryClient();
   const [sessionName, setSessionName] = useState("");
   const { data, isLoading, error } = useQuery({
-    queryKey: ["sessions", ownerId()],
-    queryFn: () => listSessions(ownerId()),
+    queryKey: ["sessions", ownerId],
+    queryFn: () => listSessions(ownerId),
   });
 
   function formatTimestamp() {
@@ -46,13 +47,13 @@ export default function Sessions() {
   const create = useMutation({
     mutationFn: () =>
       createSession({
-        ownerId: ownerId(),
+        ownerId: ownerId,
         mode: "BULK",
         device: navigator.userAgent + "_" + navigator.platform || "unknown",
         sessionName: saveSessionName,
       }),
     onSuccess: (created) => {
-      qc.invalidateQueries({ queryKey: ["sessions", ownerId()] });
+      qc.invalidateQueries({ queryKey: ["sessions", ownerId] });
       toast.success("Session created");
       if (created?.sessionPublicId) {
         navigate(`/sessions/${created.sessionPublicId}`);
