@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import Uploader from "@/ui/Uploader";
+import { AuthImage } from "@/components/AuthImage";
 
 export default function SessionDetails() {
   const ownerId = useOwnerId();
@@ -98,24 +99,18 @@ export default function SessionDetails() {
         </CardHeader>
         <CardContent>
           {data.assets?.length ? (
-            <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <ul className="grid grid-cols-2 lg:grid-cols-3 gap-3">
               {data.assets.map((a) => (
-                <li key={a.assetPublicId} className="rounded-xl border p-3">
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <li key={a.assetPublicId} className="rounded-xl border p-2">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
                     <span>{a.type}</span>
                     <Badge variant="secondary">{a.status}</Badge>
                   </div>
-                  {a.thumbnailUrl ? (
-                    <img
-                      src={a.thumbnailUrl}
-                      className="mt-2 w-full aspect-square object-cover rounded-lg"
-                      alt=""
-                    />
-                  ) : (
-                    <div className="mt-2 w-full aspect-square bg-muted rounded-lg grid place-items-center text-xs text-muted-foreground">
-                      thumbnail TBD
-                    </div>
-                  )}
+                  <AuthImage
+                    url={a.thumbnailUrl ?? null}
+                    alt={a.assetPublicId}
+                    className="w-full aspect-[4/3] object-cover rounded-lg"
+                  />
                 </li>
               ))}
             </ul>
