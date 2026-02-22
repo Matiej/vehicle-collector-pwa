@@ -9,7 +9,8 @@ export interface SessionAssetDto {
     assetPublicId: string;
     type: string; // image | audio (na teraz image)
     status: string; // RAW, VECTORIZED, TRANSCRIBED, ERROR
-    thumbnailUrl?: string | null;
+    thumbnailSmallUrl: string | null;
+    thumbnailMediumUrl: string | null;
 }
 
 

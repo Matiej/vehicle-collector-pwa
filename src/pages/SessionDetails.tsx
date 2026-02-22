@@ -107,7 +107,7 @@ export default function SessionDetails() {
                     <Badge variant="secondary">{a.status}</Badge>
                   </div>
                   <AuthImage
-                    url={a.thumbnailUrl ?? null}
+                    url={a.thumbnailSmallUrl}
                     alt={a.assetPublicId}
                     className="w-full aspect-[4/3] object-cover rounded-lg"
                   />

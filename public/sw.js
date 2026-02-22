@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vc-shell-v2';
+const CACHE_NAME = 'vc-shell-v3';
 const APP_SHELL = [
   '/',
   '/index.html',
@@ -36,6 +36,9 @@ self.addEventListener('fetch', (event) => {
 
   // nie przechwytuj backendu
   if (url.pathname.startsWith('/api/')) return;
+
+  // nie przechwytuj requestów z tokenem (autoryzowane zasoby — miniaturki itp.)
+  if (req.headers.has('authorization')) return;
 
   // cache-first z dogrywką do cache'u
   event.respondWith(
