@@ -67,15 +67,15 @@ export default function Sessions() {
 
   return (
     <div className="grid gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
         <h1 className="text-xl font-semibold">Sessions</h1>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center w-full sm:w-auto sm:ml-auto">
           <Input
             placeholder="Session name (optional)"
             maxLength={100}
             value={sessionName}
             onChange={(e) => setSessionName(e.target.value)}
-            className="w-48"
+            className="flex-1 sm:w-48"
           />
           {sessionName.length > 100 && (
             <p className="text-xs text-red-400">Maximum 100 characters</p>
