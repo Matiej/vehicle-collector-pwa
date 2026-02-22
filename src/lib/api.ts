@@ -11,6 +11,10 @@ export function setAuthToken(token: string | undefined) {
     accessToken = token;
 }
 
+export function getAccessToken(): string | undefined {
+    return accessToken;
+}
+
 api.interceptors.request.use((config) => {
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;

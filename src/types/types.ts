@@ -49,13 +49,15 @@ export interface AssetLocation {
 
 
 export interface AssetResponse {
+    id: string | null;
     assetPublicId: string;
     ownerId: string;
-    sessionPublicId?: string | null;
-    spotId?: string | null;
+    sessionPublicId: string | null;
+    spotId: string | null;
     assetType: AssetType;
     assetStatus: AssetStatus;
-    thumbUrl: string;
+    thumbnailSmallUrl: string | null;
+    thumbnailMediumUrl: string | null;
     geoLocation: AssetLocation;
     createdAt: string; // ISO
 }

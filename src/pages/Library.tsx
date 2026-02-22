@@ -4,6 +4,7 @@ import { useOwnerId } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { AuthImage } from "@/components/AuthImage";
 
 type SortDir = "ASC" | "DESC";
 
@@ -88,16 +89,16 @@ export default function Library() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground">
-                  {a.thumbUrl ? (
-                    <img
-                      src={a.thumbUrl}
+                  {a.assetType === "AUDIO" ? (
+                    <div className="mt-1 w-full aspect-[4/3] bg-muted rounded-xl grid place-items-center text-2xl">
+                      🎵
+                    </div>
+                  ) : (
+                    <AuthImage
+                      url={a.thumbnailSmallUrl}
                       alt={a.assetPublicId}
                       className="mt-1 w-full aspect-[4/3] rounded-xl object-cover"
                     />
-                  ) : (
-                    <div className="mt-1 w-full aspect-[4/3] bg-muted rounded-xl grid place-items-center text-xs">
-                      —
-                    </div>
                   )}
 
                   <div className="mt-3 flex items-center justify-between">
