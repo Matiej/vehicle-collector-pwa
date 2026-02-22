@@ -4,6 +4,7 @@ import { useOwnerId } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { AuthImage } from "@/components/AuthImage";
 
 type SortDir = "ASC" | "DESC";
 
@@ -54,11 +55,11 @@ export default function Library() {
 
       {/* Loading skeleton */}
       {isPending && (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="rounded-xl border p-3 animate-pulse">
               <div className="h-5 w-40 bg-muted rounded mb-3" />
-              <div className="w-full aspect-square bg-muted rounded-lg" />
+              <div className="w-full aspect-[4/3] bg-muted rounded-lg" />
               <div className="h-4 w-24 bg-muted rounded mt-3" />
             </div>
           ))}
@@ -76,7 +77,7 @@ export default function Library() {
       {assets.length > 0 && (
         <>
           <div className="text-sm text-muted-foreground">{total} plików</div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
             {assets.map((a) => (
               <Card key={a.assetPublicId} className="border-border/60">
                 <CardHeader className="pb-2">
@@ -88,10 +89,17 @@ export default function Library() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground">
-                  {/* Miniatura — placeholder, dopóki backend nie zwraca thumbUrl w AssetsResponse */}
-                  <div className="mt-1 w-full aspect-square bg-muted rounded-xl grid place-items-center text-xs">
-                    thumbnail TBD
-                  </div>
+                  {a.assetType === "AUDIO" ? (
+                    <div className="mt-1 w-full aspect-[4/3] bg-muted rounded-xl grid place-items-center text-2xl">
+                      🎵
+                    </div>
+                  ) : (
+                    <AuthImage
+                      url={a.thumbnailSmallUrl}
+                      alt={a.assetPublicId}
+                      className="mt-1 w-full aspect-[4/3] rounded-xl object-cover"
+                    />
+                  )}
 
                   <div className="mt-3 flex items-center justify-between">
                     <span className="text-xs">{new Date(a.createdAt).toLocaleString()}</span>

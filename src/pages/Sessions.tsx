@@ -67,15 +67,15 @@ export default function Sessions() {
 
   return (
     <div className="grid gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
         <h1 className="text-xl font-semibold">Sessions</h1>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center w-full sm:w-auto sm:ml-auto">
           <Input
             placeholder="Session name (optional)"
             maxLength={100}
             value={sessionName}
             onChange={(e) => setSessionName(e.target.value)}
-            className="w-48"
+            className="flex-1 sm:w-48"
           />
           {sessionName.length > 100 && (
             <p className="text-xs text-red-400">Maximum 100 characters</p>
@@ -91,30 +91,32 @@ export default function Sessions() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data?.map((s) => (
-          <Card key={s.sessionPublicId} className="border-border/60">
-            <CardHeader>
-              <CardTitle className="text-base flex items-center justify-between">
-                <Link
-                  to={`/sessions/${s.sessionPublicId}`}
-                  className="hover:underline"
-                >
-                  {s.sessionName || s.sessionPublicId}
-                </Link>
-                <Badge>{s.sessionMode}</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-zinc-400">
-              <div>
-                {" "}
-                Status:{" "}
-                <span className={statusColors[s.sessionStatus] || ""}>
-                  {s.sessionStatus}
-                </span>
-              </div>
-              <div>{new Date(s.createdAt).toLocaleString()}</div>
-              <div>Assets: {s.assetsCount}</div>
-            </CardContent>
-          </Card>
+          <Link
+            key={s.sessionPublicId}
+            to={`/sessions/${s.sessionPublicId}`}
+            className="block"
+          >
+            <Card className="border-border/60 hover:border-border transition-colors h-full">
+              <CardHeader>
+                <CardTitle className="text-base flex items-center justify-between">
+                  <span className="truncate">
+                    {s.sessionName || s.sessionPublicId}
+                  </span>
+                  <Badge>{s.sessionMode}</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-zinc-400">
+                <div>
+                  Status:{" "}
+                  <span className={statusColors[s.sessionStatus] || ""}>
+                    {s.sessionStatus}
+                  </span>
+                </div>
+                <div>{new Date(s.createdAt).toLocaleString()}</div>
+                <div>Assets: {s.assetsCount}</div>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
