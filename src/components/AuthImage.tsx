@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAccessToken } from "@/lib/api";
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
+import { useAuth } from "@/auth/AuthProvider";
 
 interface AuthImageProps {
   url: string | null;
@@ -10,6 +8,7 @@ interface AuthImageProps {
 }
 
 export function AuthImage({ url, alt, className }: AuthImageProps) {
+  const { token } = useAuth();
   const [src, setSrc] = useState<"loading" | "error" | string>("loading");
 
   useEffect(() => {
@@ -18,14 +17,17 @@ export function AuthImage({ url, alt, className }: AuthImageProps) {
       return;
     }
 
+    // token nie jest jeszcze gotowy — poczekaj na kolejny render gdy AuthProvider go ustawi
+    if (!token) return;
+
     setSrc("loading");
 
-    const fullUrl = `${BASE_URL}${url}`;
-    const token = getAccessToken();
     let objectUrl: string | undefined;
 
-    fetch(fullUrl, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    // url jest ścieżką względną od originu (np. "/api/public/assets/.../thumbnail?size=THUMB_320")
+    // fetch() bez prefiksu BASE_URL — przeglądarka sam doda origin
+    fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status}`);
@@ -40,7 +42,7 @@ export function AuthImage({ url, alt, className }: AuthImageProps) {
     return () => {
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [url]);
+  }, [url, token]);
 
   if (src === "loading") {
     return (
